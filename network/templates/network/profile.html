@@ -1,0 +1,54 @@
+{% extends "network/layout.html" %}
+{% block title %}Profile - {{ profile_user.username }}{% endblock %}
+{% block body %}
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h3>{{ profile_user.username }}</h3>
+      <p>{{ followers_count }} follower{{ followers_count|pluralize }}, {{ following_count }} following</p>
+    </div>
+
+    {% if request.user.is_authenticated and request.user.username != profile_user.username %}
+      <div>
+        <button id="follow-button" class="btn btn-sm btn-success" data-username="{{ profile_user.username }}">
+          {% if is_following %}Unfollow{% else %}Follow{% endif %}
+        </button>
+
+      </div>
+    {% endif %}
+  </div>
+
+  <hr>
+
+  {% for post in page_obj %}
+    {% include "network/post_partial.html" with post=post liked_post_ids=liked_post_ids %}
+  {% empty %}
+    <p>No posts yet.</p>
+  {% endfor %}
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+      {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <script>
+    // follow/unfollow uses AJAX; script expects endpoint at /profile/<username>/follow
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("follow-btn");
+      if (!btn) return;
+      btn.addEventListener("click", async () => {
+        const csrftoken = getCookie('csrftoken');
+        const username = "{{ profile_user.username }}";
+        const resp = await fetch("{% url 'toggle_follow' profile_user.username %}".replace('toggle_follow','profile'), {
+          // This template-line is safe but we'll use the named URL below from views: use profile route for fallback.
+        });
+      });
+    });
+  </script>
+{% endblock %}

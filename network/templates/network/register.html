@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+{% block body %}
+  <h2>Register</h2>
+  {% if message %}<div class="alert alert-danger">{{ message }}</div>{% endif %}
+  <form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <input class="form-control mb-2" name="username" placeholder="Username" autofocus>
+    <input class="form-control mb-2" name="email" type="email" placeholder="Email">
+    <input class="form-control mb-2" type="password" name="password" placeholder="Password">
+    <input class="form-control mb-2" type="password" name="confirmation" placeholder="Confirm Password">
+    <button class="btn btn-success" type="submit">Register</button>
+  </form>
+  <hr>
+  <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+{% endblock %}
