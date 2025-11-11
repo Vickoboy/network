@@ -3,6 +3,8 @@ gunicorn
 whitenoise
 psycopg2-binary
 setuptools
+legacy-cgi
+
 
 
 
