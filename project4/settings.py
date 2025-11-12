@@ -19,6 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 CSRF_TRUSTED_ORIGINS = [
     'https://thenetwork.up.railway.app',
 ]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
 # Quick-start development settings - unsuitable for production
